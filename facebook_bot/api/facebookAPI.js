@@ -4,23 +4,22 @@ var atob = require("atob");
 
 class FacebookAPI {
     constructor() {
-        this._token = process.env.FB_TOKEN ||
-            atob("EAADWaoQKTdwBAOZA5sxxxLe2YTOLZA46b2atSryJgmH60jwKp5DMfDvN0LkF5nwSYTUUV9TZATNBrrLGDNzxJcLUqZCTNEoSstoLJ1Thza3JHjHTHrZAXgf9DE6RcWrJ74ZAEMDRt4wRzAgj2pV1Ek88eZC9hEL79d9jdYFAZBJz1wZDZD");
+        //this._token = process.env.FB_TOKEN ||
+          //  atob("EAAJKZAdn17I4BAN1umyMX4n9mfjnUbZBXL7ZBWihLcsCf7r6QLp5Id8W7SQvBATgeu1dEi8YbqX3LkecLIZBGmXiOHDdkHhg0bnOC1LXwZAPRxHJRRXhLPCGKZAaOXqxlRDSo4HlusjFOk2VZAZA28Cf39YMlbdSM5VY8IwJqCUJ2AZDZD");
         this._storedUsers = {};
     }
 
-    getSenderName(senderId) {
+    getSenderName(senderId, accesstoken) {
         var that = this;
         return new Promise((resolve, reject) => {
             if (that._storedUsers[senderId]) {
                 resolve(that._storedUsers[senderId]);
-            }
-            else {
+            } else {
 
                 request({
                     url: `https://graph.facebook.com/v2.6/${senderId}`,
                     qs: {
-                        access_token: that._token
+                        access_token: accesstoken,
                     },
                     method: 'GET',
 
@@ -33,14 +32,14 @@ class FacebookAPI {
         });
     }
 
-    sendTextMessage(senderId, text) {
+    sendTextMessage(senderId, text,  accesstoken) {
         var messageData = {
             text: text
         };
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {
-                access_token: this._token
+                access_token:  accesstoken,
             },
             method: 'POST',
             json: {
@@ -52,14 +51,13 @@ class FacebookAPI {
         }, function(error, response, body) {
             if (error) {
                 console.log('Error sending message: ', error);
-            }
-            else if (response.body.error) {
+            } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
         });
     }
 
-    sendButtonMessage(senderId, text, buttons) {
+    sendButtonMessage(senderId, text, buttons,  accesstoken) {
         var messageData = {
             "attachment": {
                 "type": "template",
@@ -74,7 +72,7 @@ class FacebookAPI {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {
-                access_token: this._token
+                access_token:  accesstoken,
             },
             method: 'POST',
             json: {
@@ -86,21 +84,20 @@ class FacebookAPI {
         }, function(error, response, body) {
             if (error) {
                 console.log('Error sending message: ', error);
-            }
-            else if (response.body.error) {
+            } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
         });
     }
 
-    sendAttachmentBack(senderId, attachment) {
+    sendAttachmentBack(senderId, attachment,  accesstoken) {
         var messageData = {
             attachment: attachment
         };
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {
-                access_token: this._token
+                access_token:  accesstoken,
             },
             method: 'POST',
             json: {
@@ -112,14 +109,13 @@ class FacebookAPI {
         }, function(error, response, body) {
             if (error) {
                 console.log('Error sending message: ', error);
-            }
-            else if (response.body.error) {
+            } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
         });
     }
 
-    sendImage(senderId, imageUrl) {
+    sendImage(senderId, imageUrl,  accesstoken) {
         var messageData = {
             attachment: {
                 type: "image",
@@ -131,7 +127,7 @@ class FacebookAPI {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {
-                access_token: this._token
+                access_token:  accesstoken,
             },
             method: 'POST',
             json: {
@@ -143,14 +139,13 @@ class FacebookAPI {
         }, function(error, response, body) {
             if (error) {
                 console.log('Error sending message: ', error);
-            }
-            else if (response.body.error) {
+            } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
         });
     }
 
-    sendGenericMessage(senderId, posts) {
+    sendGenericMessage(senderId, posts,  accesstoken) {
 
         var messageData = {
             "attachment": {
@@ -180,7 +175,7 @@ class FacebookAPI {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {
-                access_token: this._token
+                access_token:  accesstoken,
             },
             method: 'POST',
             json: {
@@ -192,8 +187,7 @@ class FacebookAPI {
         }, function(error, response, body) {
             if (error) {
                 console.log('Error sending message: ', error);
-            }
-            else if (response.body.error) {
+            } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
         });

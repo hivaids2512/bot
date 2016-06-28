@@ -9,13 +9,15 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "async": "~0.2.8",
+    "async": "^0.2.10",
     "asyncawait": "^1.0.3",
     "atob": "^2.0.3",
     "body-parser": "^1.15.0",
     "btoa": "^1.1.2",
     "express": "~3.2.4",
+    "mongoose": "^4.5.2",
     "morgan": "^1.7.0",
+    "rekuire": "^0.1.9",
     "request": "^2.71.0",
     "simple-node-logger": "^0.93.12",
     "socket.io": "~0.9.14",

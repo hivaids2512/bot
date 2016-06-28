@@ -103,21 +103,21 @@ class BotAsync {
         }
     }
 
-    reply(senderId, textInput) {
+    reply(senderId, textInput, accesstoken) {
         async(() => {
-            var sender = await (fbAPI.getSenderName(senderId));
+            var sender = await (fbAPI.getSenderName(senderId, accesstoken));
             this.setSender(sender);
 
             var botReply = await (this.chat(textInput));
             var output = botReply.output;
             switch (botReply.type) {
                 case BOT_REPLY_TYPE.TEXT:
-                    fbAPI.sendTextMessage(senderId, output);
+                    fbAPI.sendTextMessage(senderId, output, accesstoken);
                     break;
                 case BOT_REPLY_TYPE.POST:
                     if (output.length > 0) {
                         fbAPI.sendTextMessage(senderId, "Bạn xem thử mấy bài này nhé ;)");
-                        fbAPI.sendGenericMessage(senderId, output);
+                        fbAPI.sendGenericMessage(senderId, output, accesstoken);
                     }
                     else {
                         fbAPI.sendTextMessage(senderId, "Xin lỗi mình không tim được bài nào ;)");
@@ -125,43 +125,43 @@ class BotAsync {
                     break;
                 case BOT_REPLY_TYPE.BUTTONS:
                     let buttons = botReply.buttons;
-                    fbAPI.sendButtonMessage(senderId, output, buttons);
+                    fbAPI.sendButtonMessage(senderId, output, buttons,  accesstoken);
                     break;
                 case BOT_REPLY_TYPE.IMAGE:
                     fbAPI.sendTextMessage(senderId, "Đợi tí có liền, đồ dại gái hà ^^");
-                    fbAPI.sendImage(senderId, output);
+                    fbAPI.sendImage(senderId, output,  accesstoken);
                     break;
                 default:
             }
         })();
     }
 
-    sendAttachmentBack(sender, attachment) {
-        fbAPI.sendAttachmentBack(sender, attachment);
+    sendAttachmentBack(sender, attachment,  accesstoken) {
+        fbAPI.sendAttachmentBack(sender, attachment,  accesstoken);
     }
 
-    processPostback(senderId, payload) {
+    processPostback(senderId, payload,  accesstoken) {
         async(() => {
             var sender = await (fbAPI.getSenderName(senderId));
             this.setSender(sender);
             switch (payload) {
                 case PAYLOAD.TECHNICAL_POST:
-                    this.reply(senderId, "{coding}");
+                    this.reply(senderId, "{coding}", accesstoken);
                     break;
                 case PAYLOAD.CAREER_POST:
-                    this.reply(senderId, "{nghe nghiep}");
+                    this.reply(senderId, "{nghe nghiep}", accesstoken);
                     break;
                 case PAYLOAD.GENERIC_POST:
-                    this.reply(senderId, "{linh tinh}");
+                    this.reply(senderId, "{linh tinh}", accesstoken);
                     break;
                 case PAYLOAD.SEE_CATEGORIES:
-                    this.reply(senderId, "hello");
+                    this.reply(senderId, "hello", accesstoken);
                     break;
                 case PAYLOAD.HELP:
-                    this.reply(senderId, "-help");
+                    this.reply(senderId, "-help", accesstoken);
                     break;
                 case PAYLOAD.GIRL:
-                    this.reply(senderId, "@girl");
+                    this.reply(senderId, "@girl", accesstoken);
                     break;
                 default:
                     console.log("Unknown payload: " + payload);
