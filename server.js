@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 var server = http.createServer(app);
-
+var wait = require('wait.for');
 async.waterfall([
     function(callback) {
         mongoose.connect('mongodb://quy2512:quy2512@ds023674.mlab.com:23674/tranquy_chatbot');
@@ -68,13 +68,16 @@ async.waterfall([
                     res.status(200).send("bot not found");
                 } else {
                     var accesstoken = result[0].accesstoken;
+                    //var fbbot = wait.launchFiber(require("./facebook_bot/bot"));
                     var fbbot = require("./facebook_bot/bot");
+                    console.log("done");
                     var entries = req.body.entry;
                     for (var entry of entries) {
                         log.info(entries);
                         var messaging = entry.messaging;
                         for (var message of messaging) {
                             var senderId = message.sender.id;
+                            var pageId = message.recipient.id;
                             if (message.message) {
                                 // If user send text
                                 if (message.message.text) {
