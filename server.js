@@ -9,7 +9,7 @@ var async = require('async');
 var mongoose = require('mongoose');
 
 var botschema = require('./schema/bot');
-
+var buttonFilterSchema = require('./schema/buttonFilter');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -60,9 +60,30 @@ async.waterfall([
             });
         });
 
+        app.post('/addbutoonfilter', function(req, res) {
+            if (req.body) {
+                var newFilter = buttonFilterSchema({
+                    title: req.body.title,
+                    keywords: req.body.keywords,
+                    output: req.body.output,
+                    botid: req.body.botid,
+                    payload: req.body.payload,
+                });
+                newFilter.save(function(err) {
+                    if (err) {
+                        res.send({ success: false });
+                    } else {
+                        res.send({ success: true });
+                    }
+                });
+            } else {
+                res.send(":(");
+            }
+        });
+
         app.post('/webhook/:botid', function(req, res) {
             var botid = req.params.botid;
-            
+
             botschema.find({ "_id": botid }, function(err, result) {
                 if (err) {
                     res.status(200).send("bot not found");
